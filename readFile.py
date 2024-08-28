@@ -1,35 +1,43 @@
-import openai
-from prompt import prompt
+from openai import OpenAI
+from prompt import PROMPT
 from dotenv import load_dotenv
 import os
-from Data.MachineLearningClass import Prompt
 
 load_dotenv()
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
+OpenAI.api_key = os.getenv("OPENAI_API_KEY")
 
 class Agent:
     def __init__(self):
-        self.prompt = prompt
+        self.prompt = PROMPT
 
-    def read_file(self, file_name):
-        with open(file_name, 'r') as file:
-            data = file.readlines()
-            for line in data:
-                print(line.strip()) 
+    def read_file(self, file_path):
+        data = ""
+        with open(file_path, 'r') as file:
+            # Read the entire file content
+            data = file.read() # Strip to remove any leading/trailing whitespace
+        return data
+        
+
     
-    def returnResponse(self, prompt):
-        response = openai.Completion.create(
-            engine="text-davinci-003",
-            prompt=prompt,
-            max_tokens=60
+    def returnResponse(self, data):
+        client = OpenAI()
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "system", "content": f"Read the following TXT file and output in this format: Assignment ---- Deadline \n"},
+                      {"role": "user", "content": data}],
+            max_tokens=100
         )
-        return response.choices[0].text.strip()
+        print(response)
+        
+        return response.choices[0].message.content.strip()
 
 # main function
 if __name__ == "__main__":
     agent = Agent()
-    file_name = "Prompt.txt"
-    agent.read_file(file_name)
-    response = agent.returnResponse(agent.prompt)
+    file_path = os.path.join("Data", "data1.txt")
+    
+    data = agent.read_file(file_path)
+
+    response = agent.returnResponse(data)
     print(response)
