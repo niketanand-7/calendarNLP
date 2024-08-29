@@ -22,11 +22,32 @@ class Agent:
     
     def returnResponse(self, data):
         client = OpenAI()
+        output_prompt = f"""
+        Based on the following information, create a calendar event dictionary in Python format with fields like 'summary', 'start', and 'end'. The 'start' and 'end' should be the date that you find, and end should 1 hour apart from start.
+
+        Information:
+        {data}
+
+        Expected Output:
+        event = {{
+            'summary': '<Event Name>',
+            'start': {{
+                'dateTime': (datetime.utcnow() + timedelta(days=1)).isoformat(),
+                'timeZone': 'America/New_York',
+            }},
+            'end': {{
+                'dateTime': (datetime.utcnow() + timedelta(days=1, hours=1)).isoformat(),
+                'timeZone': 'America/New_York',
+            }},
+        }}
+        """
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[{"role": "system", "content": f"Read the following TXT file and output in this format: Assignment ---- Deadline \n"},
-                      {"role": "user", "content": data}],
-            max_tokens=100
+            model="gpt-4",
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": output_prompt}
+            ],
+            max_tokens=150
         )
         print(response)
         
