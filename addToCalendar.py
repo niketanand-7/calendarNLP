@@ -4,10 +4,14 @@ from google.auth.transport.requests import Request
 from datetime import datetime, timedelta
 import os.path
 import pickle
+from readFile import Agent
+
+file_path = os.path.join("Data", "data1.txt")
+Agent = Agent()
 
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 
-def main():
+def insertingCalendarEvent():
     creds = None
 
     if os.path.exists('token.pickle'):
@@ -42,21 +46,22 @@ def main():
     print(f"Created calendar: {created_calendar['id']}")
 
     # Feature 3: Insert an event
-    event = {
-        'summary': 'Python Meeting',
-        'description': 'A meeting to discuss Python projects.',
-        'start': {
-            'dateTime': (datetime.utcnow() + timedelta(days=1)).isoformat(),
-            'timeZone': 'America/New_York',
-        },
-        'end': {
-            'dateTime': (datetime.utcnow() + timedelta(days=1, hours=1)).isoformat(),
-            'timeZone': 'America/New_York',
-        },
-    }
+    event = Agent.returnResponse(file_path)
+    # event = {
+    #     'summary': 'Python Meeting',
+    #     'description': 'A meeting to discuss Python projects.',
+    #     'start': {
+    #         'dateTime': (datetime.utcnow() + timedelta(days=1)).isoformat(),
+    #         'timeZone': 'America/New_York',
+    #     },
+    #     'end': {
+    #         'dateTime': (datetime.utcnow() + timedelta(days=1, hours=1)).isoformat(),
+    #         'timeZone': 'America/New_York',
+    #     },
+    # }
     created_event = service.events().insert(calendarId=created_calendar['id'], body=event).execute()
     print(f"Created event: {created_event['id']}")
 
 
 if __name__ == '__main__':
-    main()
+    insertingCalendarEvent()

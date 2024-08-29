@@ -1,6 +1,7 @@
 from openai import OpenAI
 from prompt import PROMPT
 from dotenv import load_dotenv
+# from addToCalendar import insertingCalendarEvent
 import os
 
 load_dotenv()
@@ -24,6 +25,7 @@ class Agent:
         client = OpenAI()
         output_prompt = f"""
         Based on the following information, create a calendar event dictionary in Python format with fields like 'summary', 'start', and 'end'. The 'start' and 'end' should be the date that you find, and end should 1 hour apart from start.
+        Only do this with one assignment from the data I am providing you
 
         Information:
         {data}
@@ -49,9 +51,11 @@ class Agent:
             ],
             max_tokens=150
         )
-        print(response)
+        res = response.choices[0].message.content.strip()
+
+
         
-        return response.choices[0].message.content.strip()
+        return res
 
 # main function
 if __name__ == "__main__":
@@ -62,3 +66,5 @@ if __name__ == "__main__":
 
     response = agent.returnResponse(data)
     print(response)
+    print("-------")
+    print(response[0])
