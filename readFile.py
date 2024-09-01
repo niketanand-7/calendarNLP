@@ -1,12 +1,19 @@
 from openai import OpenAI
 from prompt import PROMPT
 from dotenv import load_dotenv
+from pydantic import BaseModel
 # from addToCalendar import insertingCalendarEvent
 import os
 
 load_dotenv()
 
 OpenAI.api_key = os.getenv("OPENAI_API_KEY")
+
+class calendarExtraction(BaseModel):
+    summary: str
+    start: dict
+    end: dict
+
 
 class Agent:
     def __init__(self):
@@ -25,7 +32,8 @@ class Agent:
         client = OpenAI()
         output_prompt = f"""
         Based on the following information, create a calendar event dictionary in Python format with fields like 'summary', 'start', and 'end'. The 'start' and 'end' should be the date that you find, and end should 1 hour apart from start.
-        Only do this with one assignment from the data I am providing you
+        Based on the following information, create a Python dictionary for a calendar event. 
+        The output should be a Python dictionary in this exact format, with no additional text or explanations:
 
         Information:
         {data}
@@ -42,16 +50,20 @@ class Agent:
                 'timeZone': 'America/New_York',
             }},
         }}
+
+        Your output should strictly follow the format above, with the 'summary' field reflecting the event name, and the 'dateTime' fields reflecting the correct start and end times.
         """
         response = client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-4o-2024-08-06",
             messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "system", "content": "You are an expert at structured data extraction. You will be given unstructured data about my syllabus, I want you to determine start and end date and time in the dictionary and timezone to be New York, and convert it into sturctured data"},
                 {"role": "user", "content": output_prompt}
             ],
-            max_tokens=150
+            response_format=calendarExtraction,
+            max_tokens = 150,
+            temperature= 0.1
         )
-        res = response.choices[0].message.content.strip()
+        res = response.choices[0].message.parsed
 
 
         
