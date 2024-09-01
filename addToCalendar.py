@@ -5,9 +5,11 @@ from datetime import datetime, timedelta
 import os.path
 import pickle
 from readFile import Agent
+from datetime import datetime
 
 file_path = os.path.join("Data", "data1.txt")
 Agent = Agent()
+data = Agent.read_file(file_path)
 
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 
@@ -46,7 +48,7 @@ def insertingCalendarEvent():
     print(f"Created calendar: {created_calendar['id']}")
 
     # Feature 3: Insert an event
-    event = Agent.returnResponse(file_path)
+    llm_output = Agent.returnResponse(data)
     # event = {
     #     'summary': 'Python Meeting',
     #     'description': 'A meeting to discuss Python projects.',
@@ -59,6 +61,21 @@ def insertingCalendarEvent():
     #         'timeZone': 'America/New_York',
     #     },
     # }
+
+    # llm_output.start = datetime.fromisoformat(llm_output.start)
+    # print(llm_output)
+    event = {
+        'summary': llm_output.summary,
+        'start': {
+            'dateTime': llm_output.start,
+            'timeZone': 'America/New_York',
+        },
+        'end': {
+            'dateTime': llm_output.end,
+            'timeZone': 'America/New_York',
+        },
+    }
+
     created_event = service.events().insert(calendarId=created_calendar['id'], body=event).execute()
     print(f"Created event: {created_event['id']}")
 

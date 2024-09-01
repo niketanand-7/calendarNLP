@@ -2,6 +2,7 @@ from openai import OpenAI
 from prompt import PROMPT
 from dotenv import load_dotenv
 from pydantic import BaseModel
+from datetime import datetime
 # from addToCalendar import insertingCalendarEvent
 import os
 
@@ -11,8 +12,8 @@ OpenAI.api_key = os.getenv("OPENAI_API_KEY")
 
 class calendarExtraction(BaseModel):
     summary: str
-    start: dict
-    end: dict
+    start: str
+    end: str
 
 
 class Agent:
@@ -30,34 +31,39 @@ class Agent:
     
     def returnResponse(self, data):
         client = OpenAI()
-        output_prompt = f"""
-        Based on the following information, create a calendar event dictionary in Python format with fields like 'summary', 'start', and 'end'. The 'start' and 'end' should be the date that you find, and end should 1 hour apart from start.
-        Based on the following information, create a Python dictionary for a calendar event. 
-        The output should be a Python dictionary in this exact format, with no additional text or explanations:
+        # output_prompt = f"""
+        # Based on the following information, create a calendar event dictionary in Python format with fields like 'summary', 'start', and 'end'. The 'start' and 'end' should be the date that you find, and end should 1 hour apart from start.
+        # Based on the following information, create a Python dictionary for a calendar event. 
+        # The output should be a Python dictionary in this exact format, with no additional text or explanations:
 
-        Information:
-        {data}
+        # Information:
+        # {data}
 
-        Expected Output:
-        event = {{
-            'summary': '<Event Name>',
-            'start': {{
-                'dateTime': (datetime.utcnow() + timedelta(days=1)).isoformat(),
-                'timeZone': 'America/New_York',
-            }},
-            'end': {{
-                'dateTime': (datetime.utcnow() + timedelta(days=1, hours=1)).isoformat(),
-                'timeZone': 'America/New_York',
-            }},
-        }}
+        # Expected Output:
+        # event = {{
+        #     'summary': '<Event Name>',
+        #     'start': {{
+        #         'dateTime': (datetime.utcnow() + timedelta(days=1)).isoformat(),
+        #         'timeZone': 'America/New_York',
+        #     }},
+        #     'end': {{
+        #         'dateTime': (datetime.utcnow() + timedelta(days=1, hours=1)).isoformat(),
+        #         'timeZone': 'America/New_York',
+        #     }},
+        # }}
 
-        Your output should strictly follow the format above, with the 'summary' field reflecting the event name, and the 'dateTime' fields reflecting the correct start and end times.
-        """
-        response = client.chat.completions.create(
+        # Your output should strictly follow the format above, with the 'summary' field reflecting the event name, and the 'dateTime' fields reflecting the correct start and end times.
+        # """
+
+        new_prompt = f"""Based on the following information, make the 'summary' field the title of a single assignment from the data, 'start' as the closest date to the tile, and 'end' should be an hour apart from 'start'.
+                    Data: {data}
+                    """
+        
+        response = client.beta.chat.completions.parse(
             model="gpt-4o-2024-08-06",
             messages=[
                 {"role": "system", "content": "You are an expert at structured data extraction. You will be given unstructured data about my syllabus, I want you to determine start and end date and time in the dictionary and timezone to be New York, and convert it into sturctured data"},
-                {"role": "user", "content": output_prompt}
+                {"role": "user", "content": new_prompt}
             ],
             response_format=calendarExtraction,
             max_tokens = 150,
@@ -65,8 +71,10 @@ class Agent:
         )
         res = response.choices[0].message.parsed
 
-
+        print(data)
         
+        print(res)
+
         return res
 
 # main function
@@ -77,6 +85,5 @@ if __name__ == "__main__":
     data = agent.read_file(file_path)
 
     response = agent.returnResponse(data)
+
     print(response)
-    print("-------")
-    print(response[0])
