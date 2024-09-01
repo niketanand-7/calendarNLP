@@ -49,21 +49,7 @@ def insertingCalendarEvent():
 
     # Feature 3: Insert an event
     llm_output = Agent.returnResponse(data)
-    # event = {
-    #     'summary': 'Python Meeting',
-    #     'description': 'A meeting to discuss Python projects.',
-    #     'start': {
-    #         'dateTime': (datetime.utcnow() + timedelta(days=1)).isoformat(),
-    #         'timeZone': 'America/New_York',
-    #     },
-    #     'end': {
-    #         'dateTime': (datetime.utcnow() + timedelta(days=1, hours=1)).isoformat(),
-    #         'timeZone': 'America/New_York',
-    #     },
-    # }
 
-    # llm_output.start = datetime.fromisoformat(llm_output.start)
-    # print(llm_output)
     event = {
         'summary': llm_output.summary,
         'start': {

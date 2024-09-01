@@ -1,0 +1,46 @@
+,,,
+Date,Topic,Releasing Assignment,Due Assignments
+28-Aug,Syllabus review and what to expect,,
+30-Aug,Intro to Databases & diff DB types,P1 : Released,
+2-Sep,"Data Architecture, data models and schema",,
+4-Sep,"ER Diagram(entity,attribute,cardinalities)",HW1,
+6-Sep,"ER Diagram(relationship,types,weak entity)",,P1 Due
+9-Sep,Specialized ER,,
+11-Sep,Converting ER to relations & class diagram,HW2 and P2,HW1 Due
+13-Sep,Optimization of Design and Normalization(FD),,
+16-Sep,"Normalization(1NF,3NF and BCNF)",,
+18-Sep,Normalization and Review,,
+20-Sep,"Quiz 1(ER, specialized ER and normalization)",,
+23-Sep,"RA(selection,projection,operations)",,
+25-Sep,RA(operations and joins),HW3,"HW2 Due,P2 Due"
+27-Sep,RA(Joins and aggregate),,
+30-Sep,"SQL Basics(create,insert,alter)",,
+2-Oct,SQL Basics(aggregate),"HW4,P3,POTD1",HW3
+4-Oct,"SQL Basics aggregate,joins",POTD2,POTD1
+7-Oct,"SQL Basics Joins, Subqueries 1","HW5, POTD3","HW4, POTD2"
+9-Oct,"SQL Joins, Subqueries 2",POTD4,POTD3
+11-Oct,SQL Subqueries 3,,
+14-Oct,Fall Reading Day off,P4,"HW5,P3,POTD4"
+16-Oct,More Examples,,
+18-Oct,"Work on project, TA lecture",POTD5,
+21-Oct,"Adv SQL(Views, Procedure)",,
+23-Oct,Adv SQL(Procedures and Review),,
+25-Oct,Quiz2(RA and SQL Basic),POTD6,POTD5
+28-Oct,Adv SQL (Triggers),HW6,POTD6
+30-Oct,"Demo (Springboot, mysql,postman testing)",,
+1-Nov,"Indexing(Types, How it works)",,
+4-Nov,Indexing(Looking into Data Structure used),,
+6-Nov,Indexing continued,"HW7,P5","P4,HW6"
+8-Nov,Transactions & concurrency control,,
+11-Nov,"Distributed DB, scaling, system design intro",,
+13-Nov,"Cache,Distributed db, NoSQL",HW8,HW7
+15-Nov,"SQL vs NoSQL, elastic search,document db",,
+18-Nov,Review session,,HW8
+20-Nov,"Quiz3(Adv SQL, Indexing, Trransactions,Sys des)",,
+22-Nov,On demand OH,,
+25-Nov,Thanksgiving break,,
+27-Nov,Thanksgiving break,,
+29-Nov,Thanksgiving break,,
+2-Dec,Work on project,,
+4-Dec,Work on project,P6 in near sight,P5
+6-Dec,Presentation Day,,P6
